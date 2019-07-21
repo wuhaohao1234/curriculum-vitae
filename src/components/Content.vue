@@ -5,6 +5,9 @@
     </div>
     <div class="banner">
       <MessageInput :msg=msgName />
+      <Personalntroduction/>
+      <Experience/>
+      <SkillTree/>
     </div>
   </div>
 </template>
@@ -14,7 +17,10 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({
   components: {
-    MessageInput: () => import("./assembly/MessageInput.vue")
+    MessageInput: () => import("./assembly/MessageInput.vue"),
+    Personalntroduction: () => import("./assembly/Personalntroduction.vue"),
+    Experience:() => import("./assembly/Experience.vue"),
+    SkillTree:() => import("./assembly/SkillTree.vue"),
   }
 })
 export default class Content extends Vue {
@@ -25,7 +31,7 @@ export default class Content extends Vue {
 }
 </script>
 
-<style scoped>
+<style>
 .nav {
   height: 45px;
   line-height: 45px;
@@ -36,9 +42,19 @@ export default class Content extends Vue {
 .banner {
   padding: 10px 30px;
 }
-.messageInput {
+.messageInput,.personalntroduction,.experience,.skillTree {
   padding-bottom: 10px;
   margin-bottom: 10px;
   border-bottom: 1px solid #eee;
+  padding: 10px 30px;
+}
+h2,h3,h4,h5,h6{
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+}
+.el-input{
+  width: auto;
+  margin-left: 20px;
 }
 </style>

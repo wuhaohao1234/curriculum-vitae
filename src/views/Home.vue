@@ -29,7 +29,6 @@ export default class Home extends Vue {
 <style scoped>
 .content,.editore {
   border-radius: 20px;
-  height: 900px;
   overflow: hidden;
   box-shadow: 0 0 10px #ccc;
 }

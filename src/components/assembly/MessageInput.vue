@@ -1,8 +1,8 @@
 <template>
   <div class="messageInput">
     <h2>
-      <span>{{msg}}</span>
-       <el-input></el-input>
+      <span v-text="user.message" ></span>
+       <el-input v-model="user.userName" ></el-input>
     </h2>
   </div>
 </template>
@@ -14,25 +14,15 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 export default class MessageInput extends Vue {
   @Prop() private msg!: string;
   public user = {
-      userName: '吴昊',
-      message: '名称'
+      userName: '阿布',
+      message: '姓名：'
   }
   mounted() {
-    console.log("这是内容区域");
+    
   }
 }
 </script>
 
 <style scoped>
-.messageInput {
-  padding: 10px 30px;
-}
-h2{
-  display: flex;
-  flex-direction: row;
-}
-.el-input{
-  width: auto;
-  margin-left: 20px;
-}
+
 </style>

@@ -12,7 +12,8 @@ import {
   Form,
   FormItem,
   RadioButton,
-  RadioGroup
+  RadioGroup,
+  Tree,
 } from 'element-ui';
 // 引入lodah
 import _ from 'lodash'
@@ -31,6 +32,7 @@ Vue.component(Form.name, Form);
 Vue.component(FormItem.name, FormItem);
 Vue.component(RadioButton.name, RadioButton);
 Vue.component(RadioGroup.name, RadioGroup);
+Vue.component(Tree.name, Tree);
 
 Vue.config.productionTip = false;
 
