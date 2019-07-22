@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
-    "start": "npm run serve"
+    "start": "npm run serve",
+    "serNode": "node serve"
   },
   "dependencies": {
     "@types/lodash": "^4.14.136",
@@ -17,6 +18,7 @@
     "lodash": "^4.17.15",
     "mobx": "^5.13.0",
     "mobx-vue": "^2.0.9",
+    "nodejs-websocket": "^1.7.2",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.1.0",

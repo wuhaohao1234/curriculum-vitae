@@ -3,7 +3,8 @@ declare module '*.vue' {
   module "vue/types/vue" {
     interface Vue {
       _: any
-      $createLocalStorage: any
+      $createLocalStorage: any,
+      $socket: any
     }
   }
   export default Vue;
