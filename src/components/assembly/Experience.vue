@@ -1,7 +1,7 @@
 <template>
   <div class="experience">
     <h2>项目经历：</h2>
-    <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+    <el-tree :data="result" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
   </div>
 </template>
 
@@ -10,10 +10,11 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
 export default class Experience extends Vue {
-    public defaultProps = {
-          children: 'children',
-          label: 'label'
-        }
+  @Prop() private result!: any;
+  public defaultProps = {
+    children: "children",
+    label: "label"
+  };
   public data = [
     {
       label: "1. fcc西安社区官网",
@@ -22,10 +23,11 @@ export default class Experience extends Vue {
           label: "时间：2018年",
           children: [
             {
-              label: "具体负责内容：负责官网首页banner与content区域开发,并实现移动端适配"
+              label:
+                "具体负责内容：负责官网首页banner与content区域开发,并实现移动端适配"
             }
           ]
-        },
+        }
       ]
     },
     {
@@ -35,10 +37,11 @@ export default class Experience extends Vue {
           label: "时间：2018年",
           children: [
             {
-              label: "具体负责内容：负责微信小程序开发，修补同事遗留bug，与小程序代码日常维护"
+              label:
+                "具体负责内容：负责微信小程序开发，修补同事遗留bug，与小程序代码日常维护"
             }
           ]
-        },
+        }
       ]
     },
     {
@@ -51,7 +54,7 @@ export default class Experience extends Vue {
               label: "具体负责内容：负责讲解html,css课程，并指导学生完成作业"
             }
           ]
-        },
+        }
       ]
     },
     {
@@ -64,15 +67,16 @@ export default class Experience extends Vue {
               label: "具体负责内容：负责负责西宁数据池项目开发"
             }
           ]
-        },
+        }
       ]
-    },
+    }
   ];
   public handleNodeClick(data: any) {
-    console.log(data);
-    }
+    // console.log(data);
+  }
   mounted() {
-    console.log("这是项目经历");
+    // console.log("这是项目经历");
+    console.log(this.result)
   }
 }
 </script>

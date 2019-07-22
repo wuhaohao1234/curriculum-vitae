@@ -69,7 +69,7 @@ export default class SkillTree extends Vue {
      },
  ]
   mounted() {
-    console.log("这是技能树");
+    // console.log("这是技能树");
   }
 }
 </script>
