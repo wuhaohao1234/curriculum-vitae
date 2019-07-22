@@ -21,7 +21,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 @Component
 export default class Editore extends Vue {
   mounted() {
-    console.log("这是编辑区域");
+    // console.log("这是编辑区域");
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div class="home">
     <el-row :gutter="20">
       <el-col :span="16">
-        <Content />
+        <Content :stateData=state />
       </el-col>
       <el-col :span="8">
         <Editore />

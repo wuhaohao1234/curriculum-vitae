@@ -1,13 +1,13 @@
 <template>
   <div class="content">
     <div class="nav">
-      <h3>个人简历</h3>
+      <h3 v-text="stateData.computedContentMsg.value" ></h3>
     </div>
-    <div class="banner">
-      <MessageInput :msg=msgName />
-      <Personalntroduction/>
-      <Experience/>
-      <SkillTree/>
+    <div class="banner" v-for="(messageItem,keys,indexItem) in this.stateData.computedContentMsg.content" :key=keys :index=indexItem >
+      <MessageInput :result="messageItem.result" v-if="messageItem.type === 'MessageInput'" />
+      <Personalntroduction :result="messageItem.result" v-if="messageItem.type === 'Personalntroduction'" />
+      <Experience :result="messageItem.result" v-if="messageItem.type === 'Experience'" />
+      <SkillTree :result="messageItem.result" v-if="messageItem.type === 'SkillTree'" />
     </div>
   </div>
 </template>
@@ -24,9 +24,9 @@ import { Component, Prop, Vue } from "vue-property-decorator";
   }
 })
 export default class Content extends Vue {
-  public msgName: string = "姓名：";
+  @Prop() private stateData!: any;
   mounted() {
-    console.log("这是内容区域");
+    
   }
 }
 </script>
