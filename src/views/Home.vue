@@ -16,8 +16,8 @@ import { Component, Vue } from "vue-property-decorator";
 import ViewModel from "../store/index";
 @Component({
   components: {
-    Content: () => import("../components/Content.vue"),
-    Editore: () => import("../components/Editore.vue")
+    Content: () => import("../components/home-page/Content.vue"),
+    Editore: () => import("../components/home-page/Editore.vue")
   }
 })
 export default class Home extends Vue {
