@@ -10,61 +10,59 @@
       </div>
       <!-- 主体 -->
       <div class="banner">
-        <div class="banner_content">
-          <div class="contentUser">
+        <div class="banner_content" ref="bannerContent">
+          <div ref="contentScoll" class="contentUser">
             <ul>
               <li v-for="(item , itemKey) in msg" :key="itemKey">
                 <div :class="item.user? 'item': 'item item_right'">
                   <i :class="item.user? 'el-icon-eleme': ''"></i>
-                  <span class="item_data">我是时间</span>
-                  <span class="item_content">
-                    <span v-for="(itemVal, valKey) in item.value" :key="valKey"  >
-                      {{itemVal}} <br>
-                    </span>
-                    <a :href="item.dataUrl" target="_blank" v-text="item.dataUrl"></a>
+                  <span class="item_data" v-text="item.date"></span>
+                  <span v-for="(itemVal, valKey) in item.value" :key="valKey" class="item_content">
+                    <span v-if="itemVal.value">{{itemVal.value}}</span>
+                    <a
+                      v-if="itemVal.dataUrl"
+                      :href="itemVal.dataUrl"
+                      target="_blank"
+                      v-text="itemVal.dataUrl"
+                    ></a>
                   </span>
                 </div>
               </li>
             </ul>
           </div>
           <!-- 滚动条 -->
-          <div class="scrollBar" @mousedown="move"></div>
+          <!-- <div class="scrollBar" @mousedown="move"></div> -->
         </div>
       </div>
-      <!-- 输入框 -->
+      <!-- 本人输入框 -->
       <div class="footer">
-        <!-- <el-input type="textarea" :rows="1" autofocus placeholder="请输入内容" v-model="input"></el-input> -->
-        <textarea v-model="input" autofocus class="el-input" rows="1"></textarea>
+        <textarea v-model="inputUser" autofocus class="el-input" rows="1"></textarea>
         <el-button @click="putMessage" type="primary">发送</el-button>
+      </div>
+      <!-- 小强输入框 -->
+      <div class="xiaoqiang">
+        <h2>小强输入框</h2>
+        <textarea v-model="inputXiaoqiang" autofocus class="el-input" rows="1"></textarea>
+        <el-button @click="putXiaoqiang" type="primary">发送</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import scoketMessage from "../unit/scoketMessage";
+import msg from "../config";
 import { Component, Vue } from "vue-property-decorator";
 @Component({
   components: {}
 })
 export default class Test extends Vue {
-  public input = "";
-  public msg = [
-    {
-      user: "小强",
-      value: [
-        "数据1",
-        "数据1",
-        "数据1",
-      ],
-      dataUrl: "http://www.baidu.com"
-    },
-    {
-      value: ["我是数据"]
-    },
-    {
-      value: ["我是数据"]
-    }
-  ];
+  public inputUser = "";
+  public inputXiaoqiang = "";
+  public msg: {
+    [key: string]: any;
+  } = msg;
+  public wheelDeltaStyleTop = 0;
   mounted() {
     this.$socket = new WebSocket("ws://localhost:8001");
     const _this = this;
@@ -76,37 +74,17 @@ export default class Test extends Vue {
       console.log("服务以及链接");
     };
     this.$socket.onmessage = (evt: any) => {
-      let received_msg = evt.data;
-      const result = JSON.parse(received_msg);
-      if (result.value.length !== 0) {
-        console.log(result.value)
-        this.msg.push(result);
-      }
-    };
-  }
-  /**
-   * move
-   */
-  public move(e: any) {
-    let Module = e.target; //获取目标元素
-    let _this = this;
-    //算出鼠标相对元素的位置
-    let disX = e.clientX - Module.offsetLeft;
-    let disY = e.clientY - Module.offsetTop;
-    document.onmousemove = function(e: any) {
-      //鼠标按下并移动的事件
-      //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
-      let top = e.clientY - disY;
-      // this.positionY = left;
-      //移动当前元素
-      if (top < 0) {
-        top = 0;
-      }
-      Module.style.top = top + "px";
-    };
-    document.onmouseup = e => {
-      document.onmousemove = null;
-      document.onmouseup = null;
+      scoketMessage(evt)
+        .then(res => {
+         this.forEachEle(res)
+          return;
+        })
+        .catch(err => {
+          console.log("无文本");
+        })
+        .then(() => {
+          this.$refs.bannerContent.scrollTop = this.$refs.contentScoll.offsetHeight;
+        });
     };
   }
   /**
@@ -115,10 +93,38 @@ export default class Test extends Vue {
   public putMessage() {
     this.$socket.send(
       JSON.stringify({
-        value: this.input
+        user: null,
+        value: this.inputUser,
+        date: ""
       })
     );
-    this.input = "";
+    this.inputUser = "";
+  }
+  public putXiaoqiang() {
+    this.$socket.send(
+      JSON.stringify({
+        user: "xiaoqiang",
+        value: this.inputXiaoqiang,
+        date: ""
+      })
+    );
+    this.inputXiaoqiang = "";
+  }
+  /**
+   * forEachEle
+   */
+  public forEachEle(res:any) {
+    res.value.forEach((ele: any, key: number) => {
+      console.log(ele);
+      if (ele.dataUrl) {
+        if (ele.dataUrl[0] === "w") ele.dataUrl = "http://" + ele.dataUrl;
+      }
+    });
+    this.msg.push({
+      user: res.user,
+      value: res.value,
+      date: res.date
+    });
   }
 }
 </script>
@@ -130,13 +136,19 @@ a {
 li {
   list-style: none;
   margin: 40px;
-  min-height: 74px;
+  -o-user-select: none;
+  -moz-user-select: none; /*火狐 firefox*/
+  -webkit-user-select: none; /*webkit浏览器*/
+  -ms-user-select: none; /*IE10+*/
+  -khtml-user-select: none; /*早期的浏览器*/
+  user-select: none;
+  word-wrap: break-word;
 }
-li::after {
-  content: ".";
+li:after {
+  content: " ";
   display: block;
   height: 0;
-  clear: left;
+  clear: both;
   visibility: hidden;
 }
 .content {
@@ -165,7 +177,7 @@ li::after {
   color: #fff;
 }
 .banner {
-  height: 500px;
+  height: 400px;
   background: rgba(200, 200, 200, 0.7);
   overflow: hidden;
 }
@@ -185,21 +197,24 @@ li::after {
 .banner_content {
   position: relative;
   height: 100%;
+  /* overflow:scroll; */
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .contentUser,
 .scrollBar {
   position: absolute;
 }
 .contentUser {
-  position: absolute;
-  bottom: 0;
+  /* position: absolute; */
+  /* bottom: 0; */
   min-height: 100%;
-  left: 0;
+  /* left: 0; */
   width: 100%;
 }
 .item {
   width: 280px;
-  background: #ccc;
+  background: rgb(152, 225, 101);
   position: relative;
   border-radius: 10px;
 }
@@ -215,7 +230,7 @@ li::after {
   padding: 12px;
 }
 .item .item_data {
-  display: block;
+  /* display: block; */
   color: #eee;
   padding-bottom: 0;
 }
@@ -223,11 +238,18 @@ li::after {
   display: block;
   padding-top: 8px;
 }
+.item_content span {
+  /* display: block; */
+  padding: 0;
+}
 .scrollBar {
+  /* width: 100%; */
   width: 7px;
   top: 20px;
   right: 10px;
+  /* height: 200%; */
   height: 100px;
+
   background: #42b983;
   border-radius: 10px;
   cursor: pointer;
@@ -237,5 +259,13 @@ li::after {
 }
 .scrollBar:hover {
   opacity: 1;
+}
+.xiaoqiang {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.xiaoqiang textarea {
+  height: 300px;
 }
 </style>

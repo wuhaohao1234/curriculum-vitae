@@ -4,7 +4,9 @@ declare module '*.vue' {
     interface Vue {
       _: any
       $createLocalStorage: any,
-      $socket: any
+      $socket: any,
+      scroll: any
+      loadData: any
     }
   }
   export default Vue;
